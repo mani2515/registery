@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTRATION FORM</title>
+     <script>
+        function validateform(){
+            var name=document.myform.name.value;
+            var password=document.myform.pwd.value;
+
+            if(name.trim() === " "){
+                alert("name should not be empty");
+
+            }else if(password.trim().length<6){
+                alert("password should contain atleast 6 characters");
+                
+            }
+            alert("form submitted successfully");
+        
+        }
+     </script>
+</head>
+<body bgcolor="orange">
+    <div align="center">
+        <form name="myform" method="post" onsubmit="return validateform()">
+            <h1> REGISTRATION PAGE</h1>
+            <label>NAME</label>
+            <input type="text" id="name"><br><br>
+            <label> PASSWORD</label>
+            <input type="password" id="pwd"><br><br>
+            <label> EMAIL</label>
+            <input type="text" name="email"><br><br>
+
+            
+            <input type="checkbox" name="telugu">Telugu
+            <input type="checkbox" name="hindi">HINDI
+            <input type="checkbox" name="english">ENGLISH <br><br>
+            <input type="submit" value="submit">
+            <input type="reset" value="clear">          
+    
+
+            
+        </form>
+    </div>
+    
+</body>
+</html>

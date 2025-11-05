@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Learning Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --background: #f9fafb;
+            --foreground: #1f2937;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+        }
+        
+        .phase-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .topic-item {
+            transition: background-color 0.2s ease;
+        }
+        
+        .topic-item:hover {
+            background-color: #eef2ff;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background-color: var(--secondary);
+            transition: width 0.5s ease;
+        }
+        
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .dropdown-open {
+            max-height: 500px;
+        }
+        
+        .sidebar {
+            width: 280px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 50;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar-open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Mobile Menu Button -->
+    <div class="fixed top-4 left-4 z-50 md:hidden">
+        <button id="menuToggle" class="p-2 rounded-lg bg-indigo-600 text-white">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar bg-white shadow-lg">
+        <div class="p-6 border-b border-gray-200">
+            <h1 class="text-2xl font-bold text-indigo-800">Java Learning Roadmap</h1>
+            <p class="text-gray-600 mt-2">Your complete guide to mastering Java</p>
+        </div>
+        
+        <div class="p-6">
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-3">Progress Overview</h2>
+                <div class="progress-bar bg-gray-200 mb-2">
+                    <div id="overallProgress" class="progress-fill" style="width: 5%;"></div>
+                </div>
+                <p class="text-sm text-gray-600"><span id="completedCount">0</span> of 84 topics completed</p>
+            </div>
+            
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800 mb-3">Quick Navigation</h2>
+                <div class="space-y-2" id="phaseLinks">
+                    <!-- Phase links will be injected here by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <button id="resetProgress" class="w-full py-2 px-4 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition">
+                    <i class="fas fa-redo-alt mr-2"></i> Reset Progress
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content ml-0 md:ml-[280px] min-h-screen p-6">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <header class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-indigo-900 mb-4">Java Learning Roadmap</h1>
+                <p class="text-xl text-gray-700">A comprehensive guide from beginner to advanced Java developer</p>
+                <div class="mt-8 bg-indigo-100 p-4 rounded-lg">
+                    <p class="text-indigo-800"><i class="fas fa-lightbulb mr-2"></i> Estimated completion time: <strong>12-16 weeks</strong> with 1-2 hours of daily study</p>
+                </div>
+            </header>
+
+            <!-- Roadmap -->
+            <div id="roadmapContainer" class="space-y-8">
+                <!-- Phases will be injected here by JavaScript -->
+            </div>
+
+            <!-- Resources Section -->
+            <div class="mt-16 p-6 bg-white rounded-xl shadow-md">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Learning Resources</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-indigo-50 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-indigo-800 mb-2">Recommended Books</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-book text-indigo-600 mt-1 mr-2"></i>
+                                <span>Head First Java by Kathy Sierra & Bert Bates</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-book text-indigo-600 mt-1 mr-2"></i>
+                                <span>Java: The Complete Reference by Herbert Schildt</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-book text-indigo-600 mt-1 mr-2"></i>
+                                <span>Effective Java by Joshua Bloch</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-green-800 mb-2">Online Platforms</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-globe text-green-600 mt-1 mr-2"></i>
+                                <span>Oracle Java Tutorials (official documentation)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-laptop-code text-green-600 mt-1 mr-2"></i>
+                                <span>Codecademy Java Course</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-code text-green-600 mt-1 mr-2"></i>
+                                <span>LeetCode & HackerRank for practice</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-12 text-center text-gray-600 text-sm">
+                <p>Created with <i class="fas fa-heart text-red-500"></i> to help you master Java programming</p>
+                <p class="mt-2">Track your progress and complete all topics to become a Java expert!</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Roadmap Data
+        const roadmapData = [
+            {
+                title: "Phase 1: Setup and Introduction to Java",
+                duration: "3-5 days",
+                description: "Get comfortable with the environment and understand Java's big picture",
+                topics: [
+                    "What is Java? (History, features, platform independence)",
+                    "Java vs. other languages (C++, Python, etc.)",
+                    "Java Editions: SE, EE, ME",
+                    "Setting up: Install JDK, configure PATH",
+                    "First program: Write, compile, and run 'Hello World'",
+                    "Basic tools: Command-line compiler, IDE basics"
+                ]
+            },
+            {
+                title: "Phase 2: Java Fundamentals and Syntax Basics",
+                duration: "10-14 days",
+                description: "Learn the building blocks—variables, data types, operators",
+                topics: [
+                    "Variables and Data Types (primitives and reference types)",
+                    "Type casting: Implicit and explicit",
+                    "Operators: Arithmetic, relational, logical, assignment",
+                    "Input/Output Basics: System.out, Scanner class",
+                    "Comments and Code Structure",
+                    "Naming conventions"
+                ]
+            },
+            {
+                title: "Phase 3: Control Structures and Decision Making",
+                duration: "5-7 days",
+                description: "Learn how to control program flow—make decisions and repeat actions",
+                topics: [
+                    "Conditional Statements: if, if-else, nested if-else",
+                    "Switch-case statements",
+                    "Loops: for, while, do-while",
+                    "Nested loops",
+                    "Loop control: break, continue, labeled loops",
+                    "Jump statements: return"
+                ]
+            },
+            {
+                title: "Phase 4: Methods and Modular Programming",
+                duration: "4-5 days",
+                description: "Break code into reusable parts (methods) for cleaner programs",
+                topics: [
+                    "Defining methods: Syntax, parameters, return types",
+                    "Method overloading",
+                    "Passing arguments: By value and by reference",
+                    "Return types: void vs. non-void",
+                    "Scope: Local variables, parameters",
+                    "Recursion basics"
+                ]
+            },
+            {
+                title: "Phase 5: Arrays and Strings",
+                duration: "5-7 days",
+                description: "Handle collections of data and text manipulation",
+                topics: [
+                    "Arrays: Declaration, access, updating elements",
+                    "Multi-dimensional arrays",
+                    "Array methods: length, copy, sort",
+                    "Jagged arrays",
+                    "Strings: Immutability, creation",
+                    "String methods: length, charAt, substring, etc.",
+                    "StringBuilder and StringBuffer"
+                ]
+            },
+            {
+                title: "Phase 6: Object-Oriented Programming (OOP) Fundamentals",
+                duration: "12-15 days",
+                description: "Core of Java—learn classes, objects, and OOP principles",
+                topics: [
+                    "Classes and Objects: Definition, creation",
+                    "Instance variables, this keyword",
+                    "Constructors: Default, parameterized, overloading",
+                    "Access Modifiers: public, private, protected",
+                    "Getters and setters, encapsulation",
+                    "Static keyword",
+                    "Inheritance: extends, super, method overriding",
+                    "Polymorphism and Abstraction",
+                    "Interfaces",
+                    "Packages and Inner Classes"
+                ]
+            },
+            {
+                title: "Phase 7: Exception Handling and Advanced Basics",
+                duration: "4-5 days",
+                description: "Make programs robust by handling errors",
+                topics: [
+                    "Types of exceptions: Checked, unchecked, errors",
+                    "try-catch-finally blocks",
+                    "throw and throws keywords",
+                    "Custom exceptions",
+                    "try-with-resources"
+                ]
+            },
+            {
+                title: "Phase 8: Collections Framework",
+                duration: "7-10 days",
+                description: "Work with dynamic data structures efficiently",
+                topics: [
+                    "List Interface: ArrayList, LinkedList, Vector",
+                    "Set Interface: HashSet, TreeSet, LinkedHashSet",
+                    "Map Interface: HashMap, TreeMap, LinkedHashMap",
+                    "Queue and Deque interfaces",
+                    "Iterators and for-each loop",
+                    "Comparators for custom sorting"
+                ]
+            },
+            {
+                title: "Phase 9: Input/Output (I/O) and File Handling",
+                duration: "5 days",
+                description: "Read/write data from files and streams",
+                topics: [
+                    "Streams: Byte vs. Character streams",
+                    "File class: Creating, checking existence",
+                    "File I/O: FileReader/Writer, FileInputStream/OutputStream",
+                    "Buffered I/O: BufferedReader/Writer",
+                    "Serialization",
+                    "NIO (New I/O)"
+                ]
+            },
+            {
+                title: "Phase 10: Multithreading and Concurrency",
+                duration: "7-10 days",
+                description: "Handle multiple tasks simultaneously",
+                topics: [
+                    "Threads: Creating via Thread class or Runnable interface",
+                    "Thread lifecycle",
+                    "Starting/joining threads",
+                    "Synchronization",
+                    "Thread communication: wait, notify, notifyAll",
+                    "Concurrency utilities",
+                    "Deadlock and starvation"
+                ]
+            },
+            {
+                title: "Phase 11: Generics, Enums, and Annotations",
+                duration: "4 days",
+                description: "Write type-safe, reusable code",
+                topics: [
+                    "Generics: Generic classes/methods",
+                    "Bounded types and wildcards",
+                    "Enums: Declaration, methods",
+                    "Annotations: Built-in, custom annotations"
+                ]
+            },
+            {
+                title: "Phase 12: Lambda Expressions and Functional Programming",
+                duration: "3-4 days",
+                description: "Modern Java (8+) for concise code",
+                topics: [
+                    "Lambda syntax",
+                    "Functional interfaces",
+                    "Method references",
+                    "Streams API",
+                    "Optional class for null safety"
+                ]
+            },
+            {
+                title: "Phase 13: GUI Programming",
+                duration: "5-7 days",
+                description: "Build graphical user interfaces",
+                topics: [
+                    "AWT: Components, Layouts",
+                    "Swing: JFrame, JPanel, JButton",
+                    "Event handling",
+                    "JavaFX basics"
+                ]
+            },
+            {
+                title: "Phase 14: Networking, Applets, and Reflection",
+                duration: "4 days",
+                description: "Advanced Java topics",
+                topics: [
+                    "Networking basics: Sockets, URL class",
+                    "Applets (legacy technology)",
+                    "Reflection API",
+                    "Next steps: Web development, Spring Framework"
+                ]
+            }
+        ];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderRoadmap();
+            renderNavigation();
+            updateProgress();
+            
+            // Add event listeners
+            document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
+            document.getElementById('resetProgress').addEventListener('click', resetProgress);
+        });
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('sidebar-open');
+        }
+
+        // Render the roadmap phases
+        function renderRoadmap() {
+            const container = document.getElementById('roadmapContainer');
+            container.innerHTML = '';
+            
+            roadmapData.forEach((phase, index) => {
+                const phaseElement = document.createElement('div');
+                phaseElement.className = 'phase-card bg-white p-6 rounded-xl shadow-md';
+                phaseElement.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <span class="text-xl font-bold text-indigo-800 mr-3">Phase ${index + 1}</span>
+                                <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">${phase.duration}</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">${phase.title}</h2>
+                            <p class="text-gray-600 mb-4">${phase.description}</p>
+                        </div>
+                        <button class="toggle-dropdown text-indigo-600 hover:text-indigo-800" data-phase="${index}">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="dropdown-content" id="dropdown-${index}">
+                        <div class="pt-4 mt-4 border-t border-gray-200">
+                            <h3 class="font-semibold text-gray-700 mb-3">Topics to Cover:</h3>
+                            <ul class="space-y-2">
+                                ${phase.topics.map((topic, i) => `
+                                    <li class="topic-item flex items-center p-2 rounded-lg" data-phase="${index}" data-topic="${i}">
+                                        <input type="checkbox" id="phase-${index}-topic-${i}" class="topic-checkbox mr-3">
+                                        <label for="phase-${index}-topic-${i}" class="cursor-pointer">${topic}</label>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(phaseElement);
+            });
+            
+            // Add event listeners to dropdown toggles
+            document.querySelectorAll('.toggle-dropdown').forEach(button => {
+                button.addEventListener('click', function() {
+                    const phaseIndex = this.getAttribute('data-phase');
+                    const dropdown = document.getElementById(`dropdown-${phaseIndex}`);
+                    dropdown.classList.toggle('dropdown-open');
+                    this.querySelector('i').classList.toggle('fa-chevron-down');
+                    this.querySelector('i').classList.toggle('fa-chevron-up');
+                });
+            });
+            
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.topic-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    updateProgress();
+                    saveProgress();
+                });
